@@ -148,8 +148,9 @@ module ForemanFogProxmox
         mac = nic.mac
         mac ||= nic.attributes['mac']
         nic_compute_attributes.store(:macaddr, mac) if mac.present?
-        interface_compute_attributes = host.compute_attributes['interfaces_attributes'].select { |_k, v| v['id'] == nic.identifier }
-        nic_compute_attributes.store(:_delete, interface_compute_attributes[interface_compute_attributes.keys[0]]['_delete']) unless interface_compute_attributes.empty?
+        # Workaround? for #89
+        # interface_compute_attributes = host.compute_attributes['interfaces_attributes'].select { |_k, v| v['id'] == nic.identifier }
+        # nic_compute_attributes.store(:_delete, interface_compute_attributes[interface_compute_attributes.keys[0]]['_delete']) unless interface_compute_attributes.empty?
         nic_compute_attributes.store(:ip, nic.ip) if nic.ip.present?
         nic_compute_attributes.store(:ip6, nic.ip6) if nic.ip6.present?
         hash.merge(index.to_s => nic_compute_attributes)
