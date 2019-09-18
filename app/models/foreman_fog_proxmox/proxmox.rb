@@ -60,7 +60,7 @@ module ForemanFogProxmox
       logger.debug(format(_('Proxmox compute resource version is %<version>s'), version: version))
       raise ::Foreman::Exception, format(_('Proxmox version %<version>s is not semver suitable'), version: version) unless ForemanFogProxmox::Semver.is_semver?(version)
 
-      ForemanFogProxmox::Semver.to_semver(version) >= ForemanFogProxmox::Semver.to_semver('5.3.0') && ForemanFogProxmox::Semver.to_semver(version) < ForemanFogProxmox::Semver.to_semver('5.5.0')
+      ForemanFogProxmox::Semver.to_semver(version) >= ForemanFogProxmox::Semver.to_semver('5.3.0') && ForemanFogProxmox::Semver.to_semver(version) < ForemanFogProxmox::Semver.to_semver('6.1.0')
     end
 
     def test_connection(options = {})
