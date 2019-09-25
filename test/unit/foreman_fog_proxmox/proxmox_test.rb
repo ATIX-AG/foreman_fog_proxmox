@@ -232,6 +232,7 @@ module ForemanFogProxmox
         config = mock('config')
         disks = mock('disks')
         disk = mock('disk')
+        disk.stubs(:volid).returns('local-lvm:vm-0815-disk-0')
         disk.stubs(:size).returns(1_073_741_824)
         disk.stubs(:storage).returns('local-lvm')
         disk.stubs(:id).returns('virtio0')
@@ -271,6 +272,7 @@ module ForemanFogProxmox
         config = mock('config')
         disks = mock('disks')
         disk = mock('disk')
+        disk.stubs(:volid).returns('local-lvm:vm-0815-disk-0')
         disk.stubs(:size).returns(1_073_741_824)
         disk.stubs(:storage).returns('local-lvm')
         disk.stubs(:id).returns('virtio0')
@@ -292,6 +294,7 @@ module ForemanFogProxmox
             '0' => {
               '_delete' => '1',
               'id' => 'scsi0',
+              'volid' => 'local-lvm:vm-0815-disk-0',
               'storage' => 'local-lvm',
               'size' => '2147483648',
               'cache' => 'none'
@@ -351,6 +354,7 @@ module ForemanFogProxmox
         config = mock('config')
         disks = mock('disks')
         disk = mock('disk')
+        disk.stubs(:volid).returns('local-lvm:vm-0815-disk-0')
         disk.stubs(:size).returns(1_073_741_824)
         disk.stubs(:storage).returns('local-lvm')
         disks.stubs(:get).returns(disk)
@@ -370,6 +374,7 @@ module ForemanFogProxmox
           'volumes_attributes' => {
             '0' => {
               'id' => 'scsi0',
+              'volid' => 'local-lvm:vm-0815-disk-0',
               'storage' => 'local-lvm',
               'size' => '2147483648',
               'cache' => 'none'
@@ -389,6 +394,7 @@ module ForemanFogProxmox
         config = mock('config')
         disks = mock('disks')
         disk = mock('disk')
+        disk.stubs(:volid).returns('local-lvm:vm-0815-disk-0')
         disk.stubs(:size).returns(1_073_741_824)
         disk.stubs(:storage).returns('local-lvm')
         disks.stubs(:get).returns(disk)
@@ -408,6 +414,7 @@ module ForemanFogProxmox
           'volumes_attributes' => {
             '0' => {
               'id' => 'scsi0',
+              'volid' => 'local-lvm:vm-0815-disk-0',
               'storage' => 'local-lvm',
               'size' => '2',
               'cache' => 'none'
@@ -428,6 +435,7 @@ module ForemanFogProxmox
         config = mock('config')
         disks = mock('disks')
         disk = mock('disk')
+        disk.stubs(:volid).returns('local-lvm:vm-0815-disk-0')
         disk.stubs(:size).returns(1_073_741_824)
         disk.stubs(:storage).returns('local-lvm')
         disks.stubs(:get).returns(disk)
@@ -447,6 +455,7 @@ module ForemanFogProxmox
           'volumes_attributes' => {
             '0' => {
               'id' => 'scsi0',
+              'volid' => 'local-lvm2:vm-0815-disk-0',
               'storage' => 'local-lvm2',
               'size' => '1073741824',
               'cache' => 'none'
@@ -532,6 +541,7 @@ module ForemanFogProxmox
         config = mock('config')
         disks = mock('disks')
         disk = mock('disk')
+        disk.stubs(:volid).returns('local-lvm:vm-0815-disk-0')
         disk.stubs(:size).returns(1_073_741_824)
         disk.stubs(:storage).returns('local-lvm')
         disk.stubs(:id).returns('rootfs')
@@ -553,6 +563,7 @@ module ForemanFogProxmox
             'volumes_attributes' => {
               '0' => {
                 'id' => 'rootfs',
+                'volid' => 'local-lvm:vm-0815-disk-0',
                 'storage' => 'local-lvm',
                 'size' => '2147483648',
                 'cache' => 'none'
