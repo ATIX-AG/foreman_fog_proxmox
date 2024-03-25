@@ -23,18 +23,22 @@ function vmTypeSelected() {
   var host_uuid = $("input[id='host_uuid']").val();
   var new_vm =  host_uuid == undefined;
   var fieldsets = [];
+  var fieldss = [];
   fieldsets.push({id: 'config_advanced_options', toggle: true, new_vm: new_vm, selected: selected});
   fieldsets.push({id: 'config_ext', toggle: true, new_vm: new_vm, selected: selected});
   fieldsets.push({id: 'volume', toggle: true, new_vm: new_vm, selected: selected});
   fieldsets.push({id: 'network', toggle: true, new_vm: true, selected: selected});
-  fieldsets.push({id: 'config_options', toggle: false, new_vm: new_vm, selected: selected});
-  fieldsets.push({id: 'config_cpu', toggle: false, new_vm: new_vm, selected: selected});
-  fieldsets.push({id: 'config_memory', toggle: false, new_vm: new_vm, selected: selected});
-  fieldsets.push({id: 'config_cdrom', toggle: false, new_vm: new_vm, selected: selected});
-  fieldsets.push({id: 'config_os', toggle: false, new_vm: new_vm, selected: selected});
-  fieldsets.push({id: 'config_dns', toggle: false, new_vm: new_vm, selected: selected});
+  fieldss.push({id: 'config_options', new_vm: new_vm, selected: selected});
+  fieldss.push({id: 'config_cpu', new_vm: new_vm, selected: selected});
+  fieldss.push({id: 'config_memory', new_vm: new_vm, selected: selected});
+  fieldss.push({id: 'config_cdrom', new_vm: new_vm, selected: selected});
+  fieldss.push({id: 'config_os', new_vm: new_vm, selected: selected});
+  fieldss.push({id: 'config_dns', new_vm: new_vm, selected: selected});
   fieldsets.forEach(toggleFieldsets);
   toggleVolumes(selected);
+  console.log("*********** vm type ", new_vm);
+  fieldss.forEach(toggleFieldss);
+  toggleAccordions();
   return false;
 }
 
@@ -127,7 +131,9 @@ function toggleVolumes(selected){
 }
 
 function enableFieldset(fieldsetId, fieldset) {
+  console.log("**********8 enable field", fieldsetId);
   if (fieldset.toggle && fieldset.new_vm){
+    console.log("****************** enable if cond");
     fieldset_id(fieldsetId, fieldset).show();
   }
   fieldset_id(fieldsetId, fieldset).removeAttr('disabled');
@@ -135,7 +141,9 @@ function enableFieldset(fieldsetId, fieldset) {
 }
 
 function disableFieldset(fieldsetId, fieldset) {  
+  console.log("**********8 disable field", fieldsetId);
   if (fieldset.toggle && fieldset.new_vm){
+    console.log("****************** disable if cond");
     fieldset_id(fieldsetId, fieldset).hide();
   }
   fieldset_id(fieldsetId, fieldset).attr('disabled','disabled');
@@ -156,6 +164,54 @@ function fieldset_id(fieldsetId, fieldset){
 
 function fieldsets(type){
   return type === 'qemu' ? ['server'] : ['container'];
+}
+
+function toggleAccordions() {
+  $('.accordion-content').hide();
+  // Add click event handler to accordion section headings
+  $('.accordion-section').off('click').on('click', function(event) {
+    // Toggle visibility of the content of the clicked section
+    var $content = $(this).find('.accordion-content');
+    $content.slideToggle();
+    $(this).toggleClass('active');
+    // Collapse other sections except the clicked one
+    $('.accordion-content').not($content).slideUp();
+    $(this).removeClass('active');
+      // Stop event propagation to prevent double toggle
+    event.stopPropagation();
+  });
+  $('.accordion-content').on('click', function(event) {
+    event.stopPropagation();
+  });
+}
+
+function enableConfigOptions(fieldsetId, fieldset) {
+  fieldset_id(fieldsetId, fieldset).removeClass('hide');
+  fieldset_id(fieldsetId, fieldset).removeAttr('disabled');
+  input_hidden_id(fieldsetId).removeAttr('disabled');
+
+}
+
+function disableConfigOptions(fieldsetId, fieldset) {
+  fieldset_id(fieldsetId, fieldset).addClass('hide');
+  fieldset_id(fieldsetId, fieldset).attr('disabled','disabled');
+  input_hidden_id(fieldsetId).attr('disabled','disabled');
+}
+
+function toggleConfigOptions(fieldsetId, fieldset, type1, type2) {
+  if (type1 === type2) {
+    enableConfigOptions(fieldsetId, fieldset);
+  } else {
+    disableConfigOptions(fieldsetId, fieldset);
+  }
+}
+
+function toggleFieldss(fieldset){
+  ['qemu', 'lxc'].forEach(function(type){
+    fieldsets(type).forEach(function(fieldsetId){
+      toggleConfigOptions(fieldsetId, fieldset, fieldset.selected, type);
+    });
+  });
 }
 
 function toggleFieldsets(fieldset){

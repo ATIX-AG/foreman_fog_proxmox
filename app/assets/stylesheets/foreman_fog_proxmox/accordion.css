@@ -1,0 +1,14 @@
+
+
+.accordion-section legend {
+    position: relative;
+    font-weight: bold;
+  }
+
+.accordion-section legend::before {
+    content: "\25BA"; /* Unicode for a right-pointing arrow */
+    position: relative;
+    left: -1em; /* Adjust as needed */
+     top: 50%;
+    transform: translateY(-50%);
+}
