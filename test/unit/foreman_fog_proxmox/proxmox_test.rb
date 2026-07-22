@@ -54,6 +54,28 @@ module ForemanFogProxmox
       assert_equal :foreman_uuid, cr.provided_attributes[:uuid]
     end
 
+    test 'supports refreshing the compute resource cache' do
+      cr = FactoryBot.build_stubbed(:proxmox_cr)
+
+      assert_respond_to cr, :refresh_cache
+    end
+
+    test '#metadata includes storages from every node' do
+      cr, first_node, second_node = metadata_compute_resource
+      cr.expects(:storages).with(first_node.node).returns([{ storage: 'local', node_id: first_node.node }])
+      cr.expects(:storages).with(second_node.node).returns([{ storage: 'shared', node_id: second_node.node }])
+
+      assert_equal ['local', 'shared'], cr.metadata[:storages].pluck(:storage)
+    end
+
+    test '#metadata includes bridges from every node' do
+      cr, first_node, second_node = metadata_compute_resource
+      cr.expects(:bridges).with(first_node.node).returns([{ iface: 'vmbr0', node_id: first_node.node }])
+      cr.expects(:bridges).with(second_node.node).returns([{ iface: 'vmbr1', node_id: second_node.node }])
+
+      assert_equal ['vmbr0', 'vmbr1'], cr.metadata[:bridges].pluck(:iface)
+    end
+
     test '#update_required? detects added HDD attributes' do
       cr = FactoryBot.build_stubbed(:proxmox_cr)
       old_attrs = hdd_compute_attrs(hdd_attrs('0'))
@@ -116,6 +138,17 @@ module ForemanFogProxmox
     end
 
     private
+
+    def metadata_compute_resource
+      cr = FactoryBot.build_stubbed(:proxmox_cr, caching_enabled: false)
+      nodes = [stub(node: 'node-1'), stub(node: 'node-2')]
+      cr.stubs(:nodes).returns(nodes)
+      cr.stubs(:pools).returns([])
+      cr.stubs(:storages).returns([])
+      cr.stubs(:bridges).returns([])
+      cr.stubs(:images).returns([])
+      [cr, *nodes]
+    end
 
     def hdd_compute_attrs(volumes_attrs)
       { 'volumes_attributes' => volumes_attrs }
